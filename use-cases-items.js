@@ -22,7 +22,7 @@ export class UseCasesItems extends DDDSuper(I18NMixin(LitElement)) {
         heading: {type: String},
         source: { type: String },
         description: { type: String },
-        attributes: { type: Array}
+        attributes: { type: Array},
     };
   }
 
@@ -84,7 +84,7 @@ export class UseCasesItems extends DDDSuper(I18NMixin(LitElement)) {
           <h2>${this.heading}</h2>
           ${this.description}
           ${this.attributes.map((n, index) => html `
-            <img src="${n[0].attributes[0]}">
+            <img src="${n[0]}">
           `)}
         </div>
     </div>

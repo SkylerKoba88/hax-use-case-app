@@ -41,7 +41,7 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
     return [super.styles,
     css`
       :host {
-        display: block;
+        display: inline-flex;
         color: var(--ddd-theme-primary);
         background-color: var(--ddd-theme-accent);
         font-family: var(--ddd-font-navigation);
@@ -59,6 +59,14 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
       <div class="filter">
         ${this.filterTitle}
         <input type="text" id="input" placeholder="Search templates here" @input='${this.inputChanged}'>
+        <div class="filterButtons">
+          <h5>Templates</h5>
+          <button id="portfolio"></button> <p>Portfolio</p>
+          <button id="blog"></button> <p>Blog</p>
+          <button id="research"></button> <p>Research Website</p>
+          <button id="resume"></button> <p>Resume</p>
+          <button id="course"></button> <p>Course</p>
+        </div>
       </div>
       <div class="results">
         <use-cases-items
