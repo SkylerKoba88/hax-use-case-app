@@ -5,6 +5,7 @@
 import { LitElement, html, css } from "lit";
 import { DDDSuper } from "@haxtheweb/d-d-d/d-d-d.js";
 import { I18NMixin } from "@haxtheweb/i18n-manager/lib/I18NMixin.js";
+import "./use-cases-items";
 
 /**
  * `hax-use-case-app`
@@ -20,26 +21,18 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
 
   constructor() {
     super();
-    this.title = "";
-    this.t = this.t || {};
-    this.t = {
-      ...this.t,
-      title: "Title",
-    };
-    this.registerLocalization({
-      context: this,
-      localesPath:
-        new URL("./locales/hax-use-case-app.ar.json", import.meta.url).href +
-        "/../",
-      locales: ["ar", "es", "hi", "zh"],
-    });
+    this.value = null;
+    this.loading = false;
+    this.useCases = [];
+    this.filterTitle = "Filter";
   }
 
   // Lit reactive properties
   static get properties() {
     return {
-      ...super.properties,
-      title: { type: String },
+      filterTitle : {type: String},
+      loading: { type: Boolean, reflect: true },
+      useCases : {type: Array},
     };
   }
 
@@ -53,12 +46,9 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
         background-color: var(--ddd-theme-accent);
         font-family: var(--ddd-font-navigation);
       }
-      .wrapper {
+      .filter {
         margin: var(--ddd-spacing-2);
         padding: var(--ddd-spacing-4);
-      }
-      h3 span {
-        font-size: var(--hax-use-case-app-label-font-size, var(--ddd-font-size-s));
       }
     `];
   }
@@ -66,10 +56,55 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
   // Lit render the HTML
   render() {
     return html`
-<div class="wrapper">
-  <h3><span>${this.t.title}:</span> ${this.title}</h3>
-  <slot></slot>
-</div>`;
+      <div class="filter">
+        ${this.filterTitle}
+        <input type="text" id="input" placeholder="Search templates here" @input='${this.inputChanged}'>
+      </div>
+      <div class="results">
+        <use-cases-items
+        source="https://tse3.mm.bing.net/th?id=OIP.2R5E64tpisgS1-PjdIkY6wHaHa&pid=Api"
+        heading="example"
+        description="example"
+        >
+        </use-cases-items>
+        ${this.useCases.map((item, index) => html `
+          <use-cases-items
+            source="${item[0].image}"
+            heading="${item[0].tag}"
+            description="${item[0].description}"
+            attributes.n="${item[0].attributes}"
+          ></use-cases-items>
+        `
+        )}
+      </div>
+      `;
+  }
+
+  inputChanged(e) {
+    this.value = this.shadowRoot.querySelector('#input').value;
+  }
+  updated(changedProperties) {
+    if (changedProperties.has('value') && this.value) {
+      this.updateResults(this.value);
+      console.log(this.useCases);
+    } else if (changedProperties.has('value') && !this.value) {
+      this.useCases = [];
+    }
+  }
+
+  updateResults(value) {
+    this.loading = true;
+
+    fetch(`./lib/use-cases.json`).then(d => d.ok ? d.json(): {}).then(data => {
+      if (data) {
+        this.useCases = [];
+        this.useCases = data.data;
+        this.loading = false;
+      } else {
+        console.error("Data format issue");
+        this.useCases = [];
+      }
+    });
   }
 
   /**

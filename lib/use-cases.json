@@ -1,0 +1,130 @@
+{
+    "data": [
+        {
+            "tag": "Portfolio",
+            "description": "Here is a platform for you to post your work. This site contains a home page, a works page, and an about you page which you can edit to fit your needs. ",
+            "demo": "https://hax.cloud?use-case=${this.name}",
+            "image": "link",
+            "attributes": [
+                {
+                    "dark mode": "link",
+                    "pennStateApproved": "link",
+                    "easyReading": "link",
+                    "accessibility": "link"
+                }
+            ]
+        },
+        {
+            "tag": "Blog",
+            "description": "Blog description",
+            "demo": "https://hax.cloud?use-case=${this.name}",
+            "image": "link",
+            "attributes": [
+                {
+                    "dark mode": "link",
+                    "pennStateApproved": "link",
+                    "easyReading": "link",
+                    "accessibility": "link"
+                }
+            ]
+        },
+        {
+            "tag": "Course",
+            "description": "Unlock your creativity and technical skills by designing a dynamic website for your course, where you'll showcase your projects and share valuable resources.",
+            "demo": "https://hax.cloud?use-case=${this.name}",
+            "image": "link",
+            "attributes": [
+                {
+                    "dark mode": "link",
+                    "pennStateApproved": "link",
+                    "easyReading": "link",
+                    "accessibility": "link"
+                }
+            ]
+        },
+        {
+            "tag": "Research Website",
+            "description": "The Research website is a platform to publish your research, collect data, and ways to obtain funding. It comes with multiple pages that you can edit to fit your needs!",
+            "demo": "https://hax.cloud?use-case=${this.name}",
+            "image": "link",
+            "attributes": [
+                {
+                    "dark mode": "link",
+                    "pennStateApproved": "link",
+                    "easyReading": "link",
+                    "accessibility": "link"
+                }
+            ]
+        },
+        {
+            "tag": "Resume",
+            "description": "Resume description",
+            "demo": "https://hax.cloud?use-case=${this.name}",
+            "image": "link",
+            "attributes": [
+                {
+                    "dark mode": "link",
+                    "pennStateApproved": "link",
+                    "easyReading": "link",
+                    "accessibility": "link"
+                }
+            ]
+        },
+        {
+            "tag": "Portfolio",
+            "description": "Here is a platform for you to post your work. This site contains a home page, a works page, and an about you page which you can edit to fit your needs. ",
+            "demo": "https://hax.cloud?use-case=${this.name}",
+            "image": "link",
+            "attributes": [
+                {
+                    "dark mode": "link",
+                    "pennStateApproved": "link",
+                    "easyReading": "link",
+                    "accessibility": "link"
+                }
+            ]
+        },
+        {
+            "tag": "Course",
+            "description": "Unlock your creativity and technical skills by designing a dynamic website for your course, where you'll showcase your projects and share valuable resources.",
+            "demo": "https://hax.cloud?use-case=${this.name}",
+            "image": "link",
+            "attributes": [
+                {
+                    "dark mode": "link",
+                    "pennStateApproved": "link",
+                    "easyReading": "link",
+                    "accessibility": "link"
+                }
+            ]
+        },
+        {
+            "tag": "Blog",
+            "description": "Blog description",
+            "demo": "https://hax.cloud?use-case=${this.name}",
+            "image": "link",
+            "attributes": [
+                {
+                    "dark mode": "link",
+                    "pennStateApproved": "link",
+                    "easyReading": "link",
+                    "accessibility": "link"
+                }
+            ]
+        },
+        {
+            "tag": "Resume",
+            "description": "Resume description",
+            "demo": "https://hax.cloud?use-case=${this.name}",
+            "image": "link",
+            "attributes": [
+                {
+                    "dark mode": "link",
+                    "pennStateApproved": "link",
+                    "easyReading": "link",
+                    "accessibility": "link"
+                }
+            ]
+        }
+    ]
+}
