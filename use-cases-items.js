@@ -5,16 +5,18 @@
 import { LitElement, html, css } from "lit";
 import { DDDSuper } from "@haxtheweb/d-d-d/d-d-d.js";
 import { I18NMixin } from "@haxtheweb/i18n-manager/lib/I18NMixin.js";
+import '@haxtheweb/simple-icon/simple-icon.js';
 
 export class UseCasesItems extends DDDSuper(I18NMixin(LitElement)) {
 
   constructor() {
     super();
+    this.demoLink = '';
     this.source = '';
     this.heading = '';
     this.description = '';
     this.attributes = [];
-    
+    this.icon = '';
   }
 
   static get properties() {
@@ -44,6 +46,7 @@ export class UseCasesItems extends DDDSuper(I18NMixin(LitElement)) {
         min-height: 270px;
         border-radius: var(--ddd-radius-sm);
         box-shadow: var(--ddd-boxShadow-md);
+        text-align: center;
     }
   
 
@@ -79,13 +82,16 @@ export class UseCasesItems extends DDDSuper(I18NMixin(LitElement)) {
   render() {
     return html`
     <div class="image">
-        <img src="${this.source}" alt="${this.heading}" >
+      <a href="${this.demoLink}"><img src="${this.source}" alt="${this.heading}" ></a>
         <div>
           <h2>${this.heading}</h2>
           ${this.description}
-          ${this.attributes.map((n, index) => html `
-            <img src="${n[0]}">
+          ${this.attributes.map((attribute, index) => html `
+            <img src="${attribute[0]}">
           `)}
+          <span> 
+            <simple-icon-lite id="icon" icon="${this.icon}"></simple-icon-lite>
+          </span>
         </div>
     </div>
     `;

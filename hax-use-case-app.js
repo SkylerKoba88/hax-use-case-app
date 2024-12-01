@@ -6,6 +6,7 @@ import { LitElement, html, css } from "lit";
 import { DDDSuper } from "@haxtheweb/d-d-d/d-d-d.js";
 import { I18NMixin } from "@haxtheweb/i18n-manager/lib/I18NMixin.js";
 import "./use-cases-items";
+import '@haxtheweb/simple-icon/simple-icon.js';
 
 /**
  * `hax-use-case-app`
@@ -24,13 +25,12 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
     this.value = null;
     this.loading = false;
     this.useCases = [];
-    this.filterTitle = "Filter";
+    this.renderUseCases = [];
   }
 
   // Lit reactive properties
   static get properties() {
     return {
-      filterTitle : {type: String},
       loading: { type: Boolean, reflect: true },
       useCases : {type: Array},
     };
@@ -50,6 +50,15 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
         margin: var(--ddd-spacing-2);
         padding: var(--ddd-spacing-4);
       }
+      .filterButtons {
+        display: block;
+      }
+      .fButton {
+        height: 16px;
+      }
+      button:active .fButton {
+        background-color: blue;
+      }
     `];
   }
 
@@ -57,37 +66,34 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
   render() {
     return html`
       <div class="filter">
-        ${this.filterTitle}
+        <simple-icon-lite icon="icons:search"></simple-icon-lite>
         <input type="text" id="input" placeholder="Search templates here" @input='${this.inputChanged}'>
         <div class="filterButtons">
           <h5>Templates</h5>
-          <button id="portfolio"></button> <p>Portfolio</p>
-          <button id="blog"></button> <p>Blog</p>
-          <button id="research"></button> <p>Research Website</p>
-          <button id="resume"></button> <p>Resume</p>
-          <button id="course"></button> <p>Course</p>
+          <button class="fButton"></button> <p style="display:inline-flex;paddning: 8px;">Portfolio</p>
+          <div style="display:block; height: 4px;"></div>
+          <button class="fButton"></button> <p style="display:inline-flex;">Blog</p>
+          <div style="display:block; height: 4px;"></div>
+          <button class="fButton"></button> <p style="display:inline-flex;">Research Website</p>
+          <div style="display:block; height: 4px;"></div>
+          <button class="fButton"></button> <p style="display:inline-flex;">Resume</p>
+          <div style="display:block; height: 4px;"></div>
+          <button class="fButton"></button> <p style="display:inline-flex;">Course</p>
         </div>
+      </div>
+      <div class="results">
+        ${this.renderUseCases || []}
       </div>
       <div class="results">
         <use-cases-items
         source="https://tse3.mm.bing.net/th?id=OIP.2R5E64tpisgS1-PjdIkY6wHaHa&pid=Api"
         heading="example"
         description="example"
-        >
-        </use-cases-items>
-        ${this.useCases.map((item, index) => html `
-          <use-cases-items
-            source="${item[0].image}"
-            heading="${item[0].tag}"
-            description="${item[0].description}"
-            attributes.n="${item[0].attributes}"
-          ></use-cases-items>
-        `
-        )}
+        icon="icons:pregnant-woman"
+        ></use-cases-items>
       </div>
       `;
   }
-
   inputChanged(e) {
     this.value = this.shadowRoot.querySelector('#input').value;
   }
@@ -107,11 +113,24 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
       if (data) {
         this.useCases = [];
         this.useCases = data.data;
-        this.loading = false;
+        this.renderUseCases = (data.useCases || []).map((ucase) => {
+          return html `
+          <use-cases-items
+            demoLink="https://hax.cloud?use-case=${ucase[0].demo}"
+            source="${ucase[0].image}"
+            heading="${ucase[0].tag}"
+            description="${ucase[0].description}"
+            attribute="${ucase[0].attributes[0]}"
+            icon="${ucase[0].attributes[0]}"
+          ></use-cases-items>
+        `
+        });
+        
       } else {
         console.error("Data format issue");
         this.useCases = [];
       }
+      this.loading = false;
     });
   }
 

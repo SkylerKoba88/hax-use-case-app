@@ -1,23 +1,25 @@
 {
+    "status": 200,
     "data": [
         {
+            "id": "ucase-1",
             "tag": "Portfolio",
+            "title": "Case-1",
             "description": "Here is a platform for you to post your work. This site contains a home page, a works page, and an about you page which you can edit to fit your needs. ",
-            "demo": "https://hax.cloud?use-case=${this.name}",
-            "image": "link",
+            "demo": "Portfolio 1",
+            "image": "C:\/Users\/skyle\/Downloads\/portfolio-1.png",
             "attributes": [
-                {
-                    "dark mode": "link",
-                    "pennStateApproved": "link",
-                    "easyReading": "link",
-                    "accessibility": "link"
-                }
+                "accessibility",
+                "pregnant-woman",
+                "translate"
             ]
         },
         {
+            "id": "ucase-2",
             "tag": "Blog",
+            "title": "Case-2",
             "description": "Blog description",
-            "demo": "https://hax.cloud?use-case=${this.name}",
+            "demo": "Blog 1",
             "image": "link",
             "attributes": [
                 {
@@ -29,9 +31,11 @@
             ]
         },
         {
+            "id": "ucase-3",
             "tag": "Course",
+            "title": "Case-3",
             "description": "Unlock your creativity and technical skills by designing a dynamic website for your course, where you'll showcase your projects and share valuable resources.",
-            "demo": "https://hax.cloud?use-case=${this.name}",
+            "demo": "Course 1",
             "image": "link",
             "attributes": [
                 {
@@ -43,9 +47,11 @@
             ]
         },
         {
+            "id": "ucase-4",
             "tag": "Research Website",
+            "title": "Case-4",
             "description": "The Research website is a platform to publish your research, collect data, and ways to obtain funding. It comes with multiple pages that you can edit to fit your needs!",
-            "demo": "https://hax.cloud?use-case=${this.name}",
+            "demo": "Research 1",
             "image": "link",
             "attributes": [
                 {
@@ -57,9 +63,11 @@
             ]
         },
         {
+            "id": "ucase-5",
             "tag": "Resume",
+            "title": "Case-5",
             "description": "Resume description",
-            "demo": "https://hax.cloud?use-case=${this.name}",
+            "demo": "Resume 1",
             "image": "link",
             "attributes": [
                 {
@@ -71,9 +79,11 @@
             ]
         },
         {
+            "id": "ucase-6",
             "tag": "Portfolio",
+            "title": "Case-6",
             "description": "Here is a platform for you to post your work. This site contains a home page, a works page, and an about you page which you can edit to fit your needs. ",
-            "demo": "https://hax.cloud?use-case=${this.name}",
+            "demo": "Portfolio 2",
             "image": "link",
             "attributes": [
                 {
@@ -85,9 +95,11 @@
             ]
         },
         {
+            "id": "ucase-7",
             "tag": "Course",
+            "title": "Case-7",
             "description": "Unlock your creativity and technical skills by designing a dynamic website for your course, where you'll showcase your projects and share valuable resources.",
-            "demo": "https://hax.cloud?use-case=${this.name}",
+            "demo": "Course 2",
             "image": "link",
             "attributes": [
                 {
@@ -99,9 +111,11 @@
             ]
         },
         {
+            "id": "ucase-8",
             "tag": "Blog",
+            "title": "Case-8",
             "description": "Blog description",
-            "demo": "https://hax.cloud?use-case=${this.name}",
+            "demo": "Blog 2",
             "image": "link",
             "attributes": [
                 {
@@ -113,9 +127,11 @@
             ]
         },
         {
+            "id": "ucase-9",
             "tag": "Resume",
+            "title": "Case-9",
             "description": "Resume description",
-            "demo": "https://hax.cloud?use-case=${this.name}",
+            "demo": "Resume 2",
             "image": "link",
             "attributes": [
                 {
