@@ -7,11 +7,10 @@
             "title": "Case-1",
             "description": "Here is a platform for you to post your work. This site contains a home page, a works page, and an about you page which you can edit to fit your needs. ",
             "demo": "Portfolio 1",
-            "image": "C:\/Users\/skyle\/Downloads\/portfolio-1.png",
+            "image": "https://colorlib.com/wp/wp-content/uploads/sites/2/victim-portfolio-website-template.jpg",
             "attributes": [
-                "accessibility",
-                "pregnant-woman",
-                "translate"
+                "icons:accessibility",
+                "icons:translate"
             ]
         },
         {
@@ -20,14 +19,10 @@
             "title": "Case-2",
             "description": "Blog description",
             "demo": "Blog 1",
-            "image": "link",
+            "image": "https://uicookies.com/wp-content/uploads/2018/12/blog-website-templates.jpg",
             "attributes": [
-                {
-                    "dark mode": "link",
-                    "pennStateApproved": "link",
-                    "easyReading": "link",
-                    "accessibility": "link"
-                }
+                "icons:accessibility",
+                "icons:translate"
             ]
         },
         {
@@ -36,14 +31,10 @@
             "title": "Case-3",
             "description": "Unlock your creativity and technical skills by designing a dynamic website for your course, where you'll showcase your projects and share valuable resources.",
             "demo": "Course 1",
-            "image": "link",
+            "image": "https://cdn2.wpbeginner.com/wp-content/uploads/2021/01/coursera.png",
             "attributes": [
-                {
-                    "dark mode": "link",
-                    "pennStateApproved": "link",
-                    "easyReading": "link",
-                    "accessibility": "link"
-                }
+                "icons:accessibility",
+                "icons:translate"
             ]
         },
         {
@@ -52,14 +43,10 @@
             "title": "Case-4",
             "description": "The Research website is a platform to publish your research, collect data, and ways to obtain funding. It comes with multiple pages that you can edit to fit your needs!",
             "demo": "Research 1",
-            "image": "link",
+            "image": "https://mayecreate.com/wp-content/uploads/2014/07/Donald-Danforth-Plant-Science-Center.jpg",
             "attributes": [
-                {
-                    "dark mode": "link",
-                    "pennStateApproved": "link",
-                    "easyReading": "link",
-                    "accessibility": "link"
-                }
+                "icons:accessibility",
+                "icons:translate"
             ]
         },
         {
@@ -68,14 +55,10 @@
             "title": "Case-5",
             "description": "Resume description",
             "demo": "Resume 1",
-            "image": "link",
+            "image": "lhttps://colorlib.com/wp/wp-content/uploads/sites/2/leven-resume-website-template-1024x832.jpg",
             "attributes": [
-                {
-                    "dark mode": "link",
-                    "pennStateApproved": "link",
-                    "easyReading": "link",
-                    "accessibility": "link"
-                }
+                "icons:accessibility",
+                "icons:translate"
             ]
         },
         {
@@ -84,14 +67,10 @@
             "title": "Case-6",
             "description": "Here is a platform for you to post your work. This site contains a home page, a works page, and an about you page which you can edit to fit your needs. ",
             "demo": "Portfolio 2",
-            "image": "link",
+            "image": "https://speckyboy.com/wp-content/uploads/2022/07/personal-portfolio-designer-web-design-inspiration-34.jpg",
             "attributes": [
-                {
-                    "dark mode": "link",
-                    "pennStateApproved": "link",
-                    "easyReading": "link",
-                    "accessibility": "link"
-                }
+                "icons:accessibility",
+                "icons:translate"
             ]
         },
         {
@@ -100,14 +79,10 @@
             "title": "Case-7",
             "description": "Unlock your creativity and technical skills by designing a dynamic website for your course, where you'll showcase your projects and share valuable resources.",
             "demo": "Course 2",
-            "image": "link",
+            "image": "https://colorlib.com/wp/wp-content/uploads/sites/2/online-course-wordpress-plugins.jpg",
             "attributes": [
-                {
-                    "dark mode": "link",
-                    "pennStateApproved": "link",
-                    "easyReading": "link",
-                    "accessibility": "link"
-                }
+                "icons:accessibility",
+                "icons:translate"
             ]
         },
         {
@@ -116,14 +91,10 @@
             "title": "Case-8",
             "description": "Blog description",
             "demo": "Blog 2",
-            "image": "link",
+            "image": "https://www.hostinger.com/tutorials/wp-content/uploads/sites/2/2021/12/a-cup-of-jo-website-homepage-1024x570.webp",
             "attributes": [
-                {
-                    "dark mode": "link",
-                    "pennStateApproved": "link",
-                    "easyReading": "link",
-                    "accessibility": "link"
-                }
+                "icons:accessibility",
+                "icons:translate"
             ]
         },
         {
@@ -132,14 +103,10 @@
             "title": "Case-9",
             "description": "Resume description",
             "demo": "Resume 2",
-            "image": "link",
+            "image": "https://bloggingrepublic.com/wp-content/uploads/2020/06/resume-maker-9.png",
             "attributes": [
-                {
-                    "dark mode": "link",
-                    "pennStateApproved": "link",
-                    "easyReading": "link",
-                    "accessibility": "link"
-                }
+                "icons:accessibility",
+                "icons:translate"
             ]
         }
     ]

@@ -8,6 +8,9 @@
   <meta name="Description" content="Demonstration for hax-use-case-app">
 
   <style>
+    body {
+      background-color: var(--ddd-theme-default-limestoneLight);
+    }
     #demo {
       display: block;
     }
@@ -32,23 +35,30 @@
       background-color: transparent;
       font-size: 12px;
     }
+    nav {
+      display:flex;
+      background-color: var(--ddd-theme-default-coalyGray);
+      align-items: center;
+      justify-content: center;
+      border-bottom:solid 3px;
+    }
   </style>
   <title>hax-use-case-app</title>
 </head>
 
 <body>
   <div id="demo">
-    <nav style="display:flex;align-items: center;justify-content: center;border-bottom:solid 3px;">
+    <nav>
       <img src="https://iam.hax.psu.edu/assets/psu.png" style="height: 48px; display:inline-flex;vertical-align:top;">
       <simple-icon-lite id="hlogo" icon="hax:hax2022" tabindex="0" class="haxLogo" data-simple-tour-stop data-stop-title="data-label" title="Home" dir="ltr" style="height:48px;vertical-align:top;"></simple-icon-lite>
       <div class="midnav">
         <button class="midnavbut">
           <simple-icon-lite id="icon" aria-hidden="true" part="icon" icon="hax:wizard-hat" dir="ltr"></simple-icon-lite>
-          <span id="label" part="label" class>Merlin</span>
+          <span id="label" part="label" class style="color:white;">Merlin</span>
         </button>
         <button class="midnavbut">
           <simple-icon-lite id="icon" aria-hidden="true" part="icon" icon="icons:search" dir="ltr"></simple-icon-lite>
-          <span id="label" part="label" class>Search Sites</span>
+          <span id="label" part="label" class style="color:white;">Search Sites</span>
         </button>
       </div>
       <button class="midnavbut" style="height:44px; width:44px;padding:10px;">
@@ -59,7 +69,7 @@
       </button>
       <div class="midnavbut" style="display:inline-flex;height:44px;">
         <img style="height:68px;"focusable="false" src="https://hax.psu.edu/cdn/1.x.x/build/es6/node_modules/@haxtheweb/rpg-character/lib/hatColor/3.svg">
-        <span style="font-family:Press Start 2P, sans-serif;font-size:12px;align-items:center;justify-content: center;">user123</span>
+        <span style="font-family:Press Start 2P, sans-serif;font-size:12px;align-items:center;justify-content: center;color:white;">user123</span>
       </div>
       </div>
       

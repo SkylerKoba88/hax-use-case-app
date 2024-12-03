@@ -33,6 +33,7 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
     return {
       loading: { type: Boolean, reflect: true },
       useCases : {type: Array},
+      renderUseCases: {type: Array}
     };
   }
 
@@ -41,7 +42,7 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
     return [super.styles,
     css`
       :host {
-        display: inline-flex;
+        display: block;
         color: var(--ddd-theme-primary);
         background-color: var(--ddd-theme-accent);
         font-family: var(--ddd-font-navigation);
@@ -49,36 +50,90 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
       .filter {
         margin: var(--ddd-spacing-2);
         padding: var(--ddd-spacing-4);
+        background-color: var(--ddd-theme-default-white);
+        border-radius: var(--ddd-radius-xs);
       }
       .filterButtons {
-        display: block;
+        display: flex;
+        flex-direction:column;
+        gap: var(--ddd-spacing-2);
+        width: 150px;
       }
-      .fButton {
-        height: 16px;
-      }
-      button:active .fButton {
+      input[type="checked"] {
         background-color: blue;
       }
+      input[type="text"] {
+        background-color: var(--ddd-theme-default-limestoneLight);
+        border: solid var(--ddd-theme-default-limestoneGray) 1px;
+        border-radius: var(--ddd-radius-xs);
+        height: 24px;
+      }
+      .tags label {
+        margin-left: 8px;
+        color: white;
+        padding: 4px 8px;
+        background-color: var(--ddd-theme-default-coalyGray);
+        border-radius: var(--ddd-radius-sm);
+      }
+      .tg {
+        display: none;
+      }
+      .tg.selected {
+        display: inline-flex;
+      }
+      .
     `];
   }
 
+  toggleTagDisplay(e) {
+    const id = e.target.closest('label').querySelector('input').dataset.id;
+    const tag = this.shadowRoot.querySelector(`.tags [data-id="${id}"]`);
+  
+    if (e.target.checked) {
+      tag.classList.add('selected');
+    } else {
+      tag.classList.remove('selected');
+    }
+
+    const tagId = e.target.dataset.id;
+  const checked = e.target.checked;
+
+  this.renderUseCases = this.useCases.filter((useCase) =>
+    checked ? useCase.tag === tagId : true
+  ).map((filteredUseCase) => {
+    return html`
+      <use-cases-items
+        tag="${filteredUseCase.tag}"
+        demoLink="${filteredUseCase.demo}"
+        source="${filteredUseCase.image}"
+        heading="${filteredUseCase.title}"
+        description="${filteredUseCase.description}"
+        icon="${filteredUseCase.attributes[0]}"
+      ></use-cases-items>
+    `;
+  });
+  }
   // Lit render the HTML
   render() {
     return html`
-      <div class="filter">
+    <div class="tags">
+      <label data-id="portfolio" class="tg">Portfolio</label>
+      <label data-id="blog" class="tg">Blog</label>
+      <label data-id="research" class="tg">Research Site</label>
+      <label data-id="resume" class="tg">Resume</label>
+      <label data-id="course" class="tg">Course</label>
+    </div>
+    <div id="content" style="display: inline-flex;">
+    <div class="filter">
         <simple-icon-lite icon="icons:search"></simple-icon-lite>
         <input type="text" id="input" placeholder="Search templates here" @input='${this.inputChanged}'>
+        <h5>Templates</h5>
         <div class="filterButtons">
-          <h5>Templates</h5>
-          <button class="fButton"></button> <p style="display:inline-flex;paddning: 8px;">Portfolio</p>
-          <div style="display:block; height: 4px;"></div>
-          <button class="fButton"></button> <p style="display:inline-flex;">Blog</p>
-          <div style="display:block; height: 4px;"></div>
-          <button class="fButton"></button> <p style="display:inline-flex;">Research Website</p>
-          <div style="display:block; height: 4px;"></div>
-          <button class="fButton"></button> <p style="display:inline-flex;">Resume</p>
-          <div style="display:block; height: 4px;"></div>
-          <button class="fButton"></button> <p style="display:inline-flex;">Course</p>
+          <label><input type="checkbox" data-id="portfolio" @change=${this.toggleTagDisplay}>Portfolio</label>
+          <label><input type="checkbox" data-id="blog" @change=${this.toggleTagDisplay}>Blog</label>
+          <label><input type="checkbox" data-id="research" @change=${this.toggleTagDisplay}>Research Site</label>
+          <label><input type="checkbox" data-id="resume" @change=${this.toggleTagDisplay}>Resume</label>
+          <label><input type="checkbox" data-id="course" @change=${this.toggleTagDisplay}>Course</label>
         </div>
       </div>
       <div class="results">
@@ -86,12 +141,18 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
       </div>
       <div class="results">
         <use-cases-items
-        source="https://tse3.mm.bing.net/th?id=OIP.2R5E64tpisgS1-PjdIkY6wHaHa&pid=Api"
-        heading="example"
-        description="example"
-        icon="icons:pregnant-woman"
+        demoLink="https://forallthings.bible/wp-content/uploads/2017/04/kjvbibleonline.png"
+        source="https://forallthings.bible/wp-content/uploads/2017/04/kjvbibleonline.png"
+        heading="Course"
+        description="Unlock your creativity and technical skills by designing a dynamic website for your course, where you'll showcase your projects and share valuable resources."
+        iconImage="icons:accessibility"
         ></use-cases-items>
+        ${this.renderUseCases.length
+          ? this.renderUseCases
+          : html`<p>No templates available. Try searching or select a tag.</p>`}
       </div>
+    </div>
+      
       `;
   }
   inputChanged(e) {
@@ -109,21 +170,23 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
   updateResults(value) {
     this.loading = true;
 
-    fetch(`./lib/use-cases.json`).then(d => d.ok ? d.json(): {}).then(data => {
-      if (data) {
+    fetch('./lib/use-cases.json').then(d => d.ok ? d.json(): {}).then(data => {
+      if (data && Array.isArray(data.data)) {
         this.useCases = [];
         this.useCases = data.data;
-        this.renderUseCases = (data.useCases || []).map((ucase) => {
-          return html `
-          <use-cases-items
-            demoLink="https://hax.cloud?use-case=${ucase[0].demo}"
-            source="${ucase[0].image}"
-            heading="${ucase[0].tag}"
-            description="${ucase[0].description}"
-            attribute="${ucase[0].attributes[0]}"
-            icon="${ucase[0].attributes[0]}"
-          ></use-cases-items>
-        `
+        console.log(useCases);
+        this.renderUseCases = data.data.map((useCase) => {
+          return html`
+            <use-cases-items
+              activeUseCase="${this.isSelected ? '${this.useCase.id}' : ''}"
+              tag="${useCase.tag}"
+              demoLink="${useCase.demo}"
+              source="${useCase.image}"
+              heading="${useCase.title}"
+              description="${useCase.description}"
+              icon="${useCase.attributes[0]}"
+            ></use-cases-items>
+          `;
         });
         
       } else {
