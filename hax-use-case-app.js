@@ -109,6 +109,7 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
         heading="${filteredUseCase.title}"
         description="${filteredUseCase.description}"
         icon="${filteredUseCase.attributes[0]}"
+        activeUseCase="${filteredUseCase.activeUseCase}"
       ></use-cases-items>
     `;
   });
@@ -170,7 +171,7 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
   updateResults(value) {
     this.loading = true;
 
-    fetch('./lib/use-cases.json').then(d => d.ok ? d.json(): {}).then(data => {
+    fetch('./lib/use-case-data/json').then(d => d.ok ? d.json(): {}).then(data => {
       if (data && Array.isArray(data.data)) {
         this.useCases = [];
         this.useCases = data.data;
@@ -178,7 +179,7 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
         this.renderUseCases = data.data.map((useCase) => {
           return html`
             <use-cases-items
-              activeUseCase="${this.isSelected ? '${this.useCase.id}' : ''}"
+              activeUseCase="${this.useCase.id}"
               tag="${useCase.tag}"
               demoLink="${useCase.demo}"
               source="${useCase.image}"
