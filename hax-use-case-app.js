@@ -81,7 +81,9 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
       .tg.selected {
         display: inline-flex;
       }
-      .
+      #reset {
+        height: 24px;
+      }
     `];
   }
 
@@ -96,23 +98,48 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
     }
 
     const tagId = e.target.dataset.id;
-  const checked = e.target.checked;
+    const checked = e.target.checked;
 
-  this.renderUseCases = this.useCases.filter((useCase) =>
-    checked ? useCase.tag === tagId : true
-  ).map((filteredUseCase) => {
-    return html`
-      <use-cases-items
-        tag="${filteredUseCase.tag}"
-        demoLink="${filteredUseCase.demo}"
-        source="${filteredUseCase.image}"
-        heading="${filteredUseCase.title}"
-        description="${filteredUseCase.description}"
-        icon="${filteredUseCase.attributes[0]}"
-        activeUseCase="${filteredUseCase.activeUseCase}"
-      ></use-cases-items>
-    `;
-  });
+    this.renderUseCases = this.useCases.filter((useCase) =>
+      checked ? useCase.tag === tagId : true
+    ).map((filteredUseCase) => {
+      return html`
+        <use-cases-items
+          tag="${filteredUseCase.tag}"
+          demoLink="${filteredUseCase.demo}"
+          source="${filteredUseCase.image}"
+          heading="${filteredUseCase.title}"
+          description="${filteredUseCase.description}"
+          icon="${filteredUseCase.attributes[0]}"
+          activeUseCase="${filteredUseCase.activeUseCase}"
+        ></use-cases-items>
+      `;
+    });
+  }
+  resetFilters() {
+    this.shadowRoot.querySelector('#input').value = '';
+    this.value = null;
+
+    const checkboxes = this.shadowRoot.querySelectorAll('.filterButtons input[type="checkbox"]');
+    checkboxes.forEach(checkbox => (checkbox.checked = false));
+
+    const tags = this.shadowRoot.querySelectorAll('.tags .tg');
+    tags.forEach((tag) => tag.classList.remove('selected'));
+    tags.forEach((tag) => (tag.style.display = 'none'));
+
+    this.renderUseCases = this.useCases.map((useCase) => {
+      return html`
+        <use-cases-items
+          tag="${useCase.tag}"
+          demoLink="${useCase.demo}"
+          source="${useCase.image}"
+          heading="${useCase.title}"
+          description="${useCase.description}"
+          icon="${useCase.attributes[0]}"
+          activeUseCase="${useCase.activeUseCase}"
+        ></use-cases-items>
+      `;
+    });
   }
   // Lit render the HTML
   render() {
@@ -128,6 +155,7 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
     <div class="filter">
         <simple-icon-lite icon="icons:search"></simple-icon-lite>
         <input type="text" id="input" placeholder="Search templates here" @input='${this.inputChanged}'>
+        <button id="reset" @click="${this.resetFilters}">Reset</button>
         <h5>Templates</h5>
         <div class="filterButtons">
           <label><input type="checkbox" data-id="portfolio" @change=${this.toggleTagDisplay}>Portfolio</label>
