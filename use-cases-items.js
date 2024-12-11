@@ -16,7 +16,6 @@ export class UseCasesItems extends DDDSuper(I18NMixin(LitElement)) {
     this.source = '';
     this.heading = '';
     this.description = '';
-    this.attributes = [];
     this.iconImage = '';
     this.isSelected = false;
     this.activeUseCase = '';
@@ -29,7 +28,6 @@ export class UseCasesItems extends DDDSuper(I18NMixin(LitElement)) {
         demoLink: {type: String},
         source: { type: String },
         description: { type: String },
-        attributes: { type: Array},
         iconImage: {type: String},
         isSelected: {type: Boolean, reflected: true},
         activeUseCase: {type: String}
@@ -56,7 +54,7 @@ export class UseCasesItems extends DDDSuper(I18NMixin(LitElement)) {
         text-align: center;
     }
     :host([isSelected]) {
-      background-color: var(--ddd-theme-default-creekLight) ;
+      background-color: var(--ddd-theme-default-creekLight);
     }
   
     .image div, .image img {
@@ -121,6 +119,9 @@ export class UseCasesItems extends DDDSuper(I18NMixin(LitElement)) {
 //todo: make selected button change between selected/select && different colors
 //make continue button appear/disappear
     this.isSelected = !this.isSelected;
+    if (this.isSelected) {
+      console.log(this.activeUseCase);
+    }
   }
   // Lit render the HTML
   render() {
@@ -134,11 +135,8 @@ export class UseCasesItems extends DDDSuper(I18NMixin(LitElement)) {
         <div>
           <h2>${this.heading}</h2>
           ${this.description}
-          ${this.attributes.map((attribute, index) => html `
-            <img src="${attribute[0]}">
-          `)}
           <div style="background-color: transparent; display: flex; padding: 8px;" class="cardBottom">
-            <simple-icon-lite id="icon" aria-hidden="true" part="icon" icon="${this.iconImage}" dir="ltr"></simple-icon-lite>
+            <simple-icon-lite id="icon" aria-hidden="true" part="icon" icon="${this.iconImage}" dir="ltr" class="tooltiptext">${this.iconImage}</simple-icon-lite>
             <button class="select ${this.isSelected ? 'selected' : ''}" @click=${this.toggleDisplay}>${this.isSelected ? 'Selected' : 'Select'}</button>
             <button class="continue ${this.isSelected ? 'visible' : ''}">Continue</button>
           </div>

@@ -22,10 +22,12 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
 
   constructor() {
     super();
-    this.value = null;
+    this.value = "portfolio";
     this.loading = false;
     this.useCases = [];
+    this.filteredResults = [];
     this.renderUseCases = [];
+    this.updateResults(this.value);
   }
 
   // Lit reactive properties
@@ -33,6 +35,7 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
     return {
       loading: { type: Boolean, reflect: true },
       useCases : {type: Array},
+      filteredResults: {type: Array},
       renderUseCases: {type: Array}
     };
   }
@@ -87,45 +90,13 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
     `];
   }
 
-  toggleTagDisplay(e) {
-    const id = e.target.closest('label').querySelector('input').dataset.id;
-    const tag = this.shadowRoot.querySelector(`.tags [data-id="${id}"]`);
-  
-    if (e.target.checked) {
-      tag.classList.add('selected');
-    } else {
-      tag.classList.remove('selected');
-    }
-
-    const tagId = e.target.dataset.id;
-    const checked = e.target.checked;
-
-    this.renderUseCases = this.useCases.filter((useCase) =>
-      checked ? useCase.tag === tagId : true
-    ).map((filteredUseCase) => {
-      return html`
-        <use-cases-items
-          tag="${filteredUseCase.tag}"
-          demoLink="${filteredUseCase.demo}"
-          source="${filteredUseCase.image}"
-          heading="${filteredUseCase.title}"
-          description="${filteredUseCase.description}"
-          icon="${filteredUseCase.attributes[0]}"
-          activeUseCase="${filteredUseCase.activeUseCase}"
-        ></use-cases-items>
-      `;
-    });
-  }
+  //reset filters
   resetFilters() {
     this.shadowRoot.querySelector('#input').value = '';
     this.value = null;
 
     const checkboxes = this.shadowRoot.querySelectorAll('.filterButtons input[type="checkbox"]');
     checkboxes.forEach(checkbox => (checkbox.checked = false));
-
-    const tags = this.shadowRoot.querySelectorAll('.tags .tg');
-    tags.forEach((tag) => tag.classList.remove('selected'));
-    tags.forEach((tag) => (tag.style.display = 'none'));
 
     this.renderUseCases = this.useCases.map((useCase) => {
       return html`
@@ -135,13 +106,22 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
           source="${useCase.image}"
           heading="${useCase.title}"
           description="${useCase.description}"
-          icon="${useCase.attributes[0]}"
+          iconImage="${useCase.attribute}"
           activeUseCase="${useCase.activeUseCase}"
         ></use-cases-items>
       `;
     });
   }
-  // Lit render the HTML
+//filter results
+  filter() {
+
+  }
+
+//selected function to make only one item be selected at a time
+
+//continue function to display pop-up
+
+//render html
   render() {
     return html`
     <div class="tags">
@@ -158,18 +138,31 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
         <button id="reset" @click="${this.resetFilters}">Reset</button>
         <h5>Templates</h5>
         <div class="filterButtons">
-          <label><input type="checkbox" data-id="portfolio" @change=${this.toggleTagDisplay}>Portfolio</label>
-          <label><input type="checkbox" data-id="blog" @change=${this.toggleTagDisplay}>Blog</label>
-          <label><input type="checkbox" data-id="research" @change=${this.toggleTagDisplay}>Research Site</label>
-          <label><input type="checkbox" data-id="resume" @change=${this.toggleTagDisplay}>Resume</label>
-          <label><input type="checkbox" data-id="course" @change=${this.toggleTagDisplay}>Course</label>
+          <label><input type="checkbox" data-id="portfolio" @change=${this.filter}>Portfolio</label>
+          <label><input type="checkbox" data-id="blog" @change=${this.filter}>Blog</label>
+          <label><input type="checkbox" data-id="research" @change=${this.filter}>Research Site</label>
+          <label><input type="checkbox" data-id="resume" @change=${this.filter}>Resume</label>
+          <label><input type="checkbox" data-id="course" @change=${this.filter}>Course</label>
         </div>
       </div>
+
       <div class="results">
-        ${this.renderUseCases || []}
+        ${this.filteredResults = this.useCases.map((useCase) => html `
+        <use-cases-items
+            activeUseCase = "${useCase.id}"
+            tag = "${useCase.tag}"
+            demoLink = "${useCase.demo}"
+            source = "${useCase.image}"
+            heading = "${useCase.title}"
+            description = "${useCase.description}"
+            iconImage = "${useCase.attribute}">
+          </use-cases-items>
+        `
+        )}
       </div>
       <div class="results">
         <use-cases-items
+        tag = "course"
         demoLink="https://forallthings.bible/wp-content/uploads/2017/04/kjvbibleonline.png"
         source="https://forallthings.bible/wp-content/uploads/2017/04/kjvbibleonline.png"
         heading="Course"
@@ -190,40 +183,42 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
   updated(changedProperties) {
     if (changedProperties.has('value') && this.value) {
       this.updateResults(this.value);
-      console.log(this.useCases);
+      console.log(this.renderUseCases);
     } else if (changedProperties.has('value') && !this.value) {
-      this.useCases = [];
+      this.renderUseCases = [];
     }
   }
 
+//fetch results
   updateResults(value) {
     this.loading = true;
 
-    fetch('./lib/use-case-data/json').then(d => d.ok ? d.json(): {}).then(data => {
-      if (data && Array.isArray(data.data)) {
-        this.useCases = [];
-        this.useCases = data.data;
-        console.log(useCases);
-        this.renderUseCases = data.data.map((useCase) => {
-          return html`
-            <use-cases-items
-              activeUseCase="${this.useCase.id}"
-              tag="${useCase.tag}"
-              demoLink="${useCase.demo}"
-              source="${useCase.image}"
-              heading="${useCase.title}"
-              description="${useCase.description}"
-              icon="${useCase.attributes[0]}"
-            ></use-cases-items>
-          `;
-        });
-        
-      } else {
-        console.error("Data format issue");
-        this.useCases = [];
+    fetch(new URL('./lib/use-case-data.json',import.meta.url).href).then(response => {
+      if(!response.ok) {
+        throw new Error('Network response was not ok');
       }
-      this.loading = false;
-    });
+      return response.json();})
+      .then(data => {
+        if (Array.isArray(data.data)) {
+          var results = data.data;
+          this.renderUseCases = results.map(useCase => ({
+            activeUseCase: useCase.id,
+            tag: useCase.tag,
+            demoLink: useCase.demo,
+            source: useCase.image,
+            heading: useCase.title,
+            description: useCase.description,
+            iconImage: useCase.attribute
+          }));
+          this.filteredResults = [];
+        } else {
+          console.error("Data format issue");
+          console.log(data);
+          this.filteredResults = [];
+        }
+        this.loading = false;
+      })
+      
   }
 
   /**
