@@ -25,8 +25,12 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
     this.value = "portfolio";
     this.loading = false;
     this.useCases = [];
+    this.useCaseId = "";
+    this.searchValue = "";
     this.filteredResults = [];
+    this.checkedFilters = [];
     this.renderUseCases = [];
+    this.activeUseCase = false;
     this.updateResults(this.value);
   }
 
@@ -35,7 +39,10 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
     return {
       loading: { type: Boolean, reflect: true },
       useCases : {type: Array},
+      searchValue : {type: String},
       filteredResults: {type: Array},
+      checkedFilters: {type: Array},
+      activeUseCase: {type: Boolean, reflect: true},
       renderUseCases: {type: Array}
     };
   }
@@ -87,50 +94,123 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
       #reset {
         height: 24px;
       }
+      .results {
+        width: 920px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 16px;
+        flex: 1;
+        padding: 0px 16px;
+        margin: 16px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .activeUseCase {
+        background-color: blue;
+      }
     `];
   }
 
   //reset filters
   resetFilters() {
     this.shadowRoot.querySelector('#input').value = '';
-    this.value = null;
+    this.searchValue = "";
+    this.checkedFilters = [];
+    const checkboxes = this.shadowRoot.querySelectorAll("input[type='checkbox']");
+      checkboxes.forEach((checkbox) => {
+        checkbox.checked = false;
+      });
+    this.filteredResults = this.useCases.map((useCase) => 
+    html`
+      <use-cases-items
+        tag="${useCase.tag}"
+        demoLink="${useCase.demoLink}"
+        source="${useCase.source}"
+        heading="${useCase.heading}"
+        description="${useCase.description}"
+        iconImage="${useCase.iconImage}"
+        activeUseCase="${useCase.activeUseCase}"
+      ></use-cases-items>
+    `);
+    this.requestUpdate();
+  }
+//filter results
+//For the life of me I cannot get this to work with the way I set up my code
+  filter() {
+    this.searchValue = this.value?.toLowerCase() || ""; //declares search value to value in lowercase
 
-    const checkboxes = this.shadowRoot.querySelectorAll('.filterButtons input[type="checkbox"]');
-    checkboxes.forEach(checkbox => (checkbox.checked = false));
+    this.filteredResults = this.useCases.filter((useCase) => { //maps filteredResults
+      const matchSearch = this.searchValue ? useCase.tag.toLowerCase().includes(this.searchValue) :true;
 
-    this.renderUseCases = this.useCases.map((useCase) => {
+      const useCaseTag = useCase.tag?.toLowerCase() || "";
+      const matchFilters = this.checkedFilters.length === 0
+      ? true
+      : this.checkedFilters.some((filter) => 
+      useCase.useCaseTag?.toLowerCase() === filter.toLowerCase()
+      );
+
+      return matchSearch && matchFilters;
+    })
+    this.renderUseCases = this.filteredResults.map((useCase) => {
+      const isSelected = this.activeUseCase === useCase.useCaseId; // Determine if this use case is active
       return html`
         <use-cases-items
-          tag="${useCase.tag}"
-          demoLink="${useCase.demo}"
-          source="${useCase.image}"
-          heading="${useCase.title}"
-          description="${useCase.description}"
-          iconImage="${useCase.attribute}"
-          activeUseCase="${useCase.activeUseCase}"
+          .tag="${useCase.tag}"
+          .demoLink="${useCase.demoLink}"
+          .source="${useCase.source}"
+          .heading="${useCase.heading}"
+          .description="${useCase.description}"
+          .iconImage="${useCase.iconImage}"
+          .isSelected="${isSelected}"
+          @select-use-case="${() => this.selectUseCase(useCase.useCaseId)}"
         ></use-cases-items>
       `;
     });
-  }
-//filter results
-  filter() {
-
+    this.requestUpdate();
   }
 
-//selected function to make only one item be selected at a time
+  handleSearch(event) {
+    this.searchValue = event.target.value.toLowerCase();
+  }
 
-//continue function to display pop-up
+  updateFilterState(e) {
+    const filter = e.target.dataset.id;
+    if (e.target.checked) {
+      this.checkedFilters = [...this.checkedFilters, filter];
+    } else {
+      this.checkedFilters = this.checkedFilters.filter((item) => item !== filter);
+    }
+    console.log('Checked Filters:', this.checkedFilters);
+    this.filter();
+    console.log("Use Cases:", this.useCases.map(useCase => useCase.tag));
+  }
+
+  selectUseCase(useCaseId) {
+    this.activeUseCase = this.activeUseCase === useCaseId ? null : useCaseId;
+  
+    // Update the state of each rendered item
+    this.renderUseCases = this.useCases.map((useCase) => {
+      const isSelected = this.activeUseCase === useCase.useCaseId; // Check if active
+      return html`
+        <use-cases-items
+          .tag="${useCase.tag}"
+          .demoLink="${useCase.demoLink}"
+          .source="${useCase.source}"
+          .heading="${useCase.heading}"
+          .description="${useCase.description}"
+          .iconImage="${useCase.iconImage}"
+          .isSelected="${isSelected}"
+          @select-use-case="${() => this.selectUseCase(useCase.useCaseId)}"
+        ></use-cases-items>
+      `;
+    });
+  
+    this.requestUpdate();
+  }
 
 //render html
   render() {
     return html`
-    <div class="tags">
-      <label data-id="portfolio" class="tg">Portfolio</label>
-      <label data-id="blog" class="tg">Blog</label>
-      <label data-id="research" class="tg">Research Site</label>
-      <label data-id="resume" class="tg">Resume</label>
-      <label data-id="course" class="tg">Course</label>
-    </div>
     <div id="content" style="display: inline-flex;">
     <div class="filter">
         <simple-icon-lite icon="icons:search"></simple-icon-lite>
@@ -138,37 +218,15 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
         <button id="reset" @click="${this.resetFilters}">Reset</button>
         <h5>Templates</h5>
         <div class="filterButtons">
-          <label><input type="checkbox" data-id="portfolio" @change=${this.filter}>Portfolio</label>
-          <label><input type="checkbox" data-id="blog" @change=${this.filter}>Blog</label>
-          <label><input type="checkbox" data-id="research" @change=${this.filter}>Research Site</label>
-          <label><input type="checkbox" data-id="resume" @change=${this.filter}>Resume</label>
-          <label><input type="checkbox" data-id="course" @change=${this.filter}>Course</label>
+          <label><input type="checkbox" data-id="portfolio" @change=${this.updateFilterState}>Portfolio</label>
+          <label><input type="checkbox" data-id="blog" @change=${this.updateFilterState}>Blog</label>
+          <label><input type="checkbox" data-id="research" @change=${this.updateFilterState}>Research Site</label>
+          <label><input type="checkbox" data-id="resume" @change=${this.updateFilterState}>Resume</label>
+          <label><input type="checkbox" data-id="course" @change=${this.updateFilterState}>Course</label>
         </div>
       </div>
 
       <div class="results">
-        ${this.filteredResults = this.useCases.map((useCase) => html `
-        <use-cases-items
-            activeUseCase = "${useCase.id}"
-            tag = "${useCase.tag}"
-            demoLink = "${useCase.demo}"
-            source = "${useCase.image}"
-            heading = "${useCase.title}"
-            description = "${useCase.description}"
-            iconImage = "${useCase.attribute}">
-          </use-cases-items>
-        `
-        )}
-      </div>
-      <div class="results">
-        <use-cases-items
-        tag = "course"
-        demoLink="https://forallthings.bible/wp-content/uploads/2017/04/kjvbibleonline.png"
-        source="https://forallthings.bible/wp-content/uploads/2017/04/kjvbibleonline.png"
-        heading="Course"
-        description="Unlock your creativity and technical skills by designing a dynamic website for your course, where you'll showcase your projects and share valuable resources."
-        iconImage="icons:accessibility"
-        ></use-cases-items>
         ${this.renderUseCases.length
           ? this.renderUseCases
           : html`<p>No templates available. Try searching or select a tag.</p>`}
@@ -179,6 +237,8 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
   }
   inputChanged(e) {
     this.value = this.shadowRoot.querySelector('#input').value;
+    this.searchValue = e.target.value.toLowerCase();
+    this.filter();
   }
   updated(changedProperties) {
     if (changedProperties.has('value') && this.value) {
@@ -190,36 +250,36 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
   }
 
 //fetch results
-  updateResults(value) {
-    this.loading = true;
+updateResults(value) {
+  this.loading = true;
 
-    fetch(new URL('./lib/use-case-data.json',import.meta.url).href).then(response => {
-      if(!response.ok) {
-        throw new Error('Network response was not ok');
+  fetch(new URL('./lib/use-case-data.json', import.meta.url).href)
+    .then(response => {
+      if (!response.ok) throw new Error('Network response was not ok');
+      return response.json();
+    })
+    .then(data => {
+      if (Array.isArray(data.data)) {
+        this.useCases = data.data.map((useCase) => ({
+          useCaseId: useCase.id,
+          tag: useCase.tag || "",
+          demoLink: useCase.demo || "",
+          source: useCase.image || "",
+          heading: useCase.title || "",
+          description: useCase.description || "",
+          iconImage: useCase.attribute || ""
+        }));
+
+        console.log("Fetched Use Cases (Full Objects):", this.useCases);
+        this.filter();
+      } else {
+        console.error("Data format issue");
+        this.useCases = [];
       }
-      return response.json();})
-      .then(data => {
-        if (Array.isArray(data.data)) {
-          var results = data.data;
-          this.renderUseCases = results.map(useCase => ({
-            activeUseCase: useCase.id,
-            tag: useCase.tag,
-            demoLink: useCase.demo,
-            source: useCase.image,
-            heading: useCase.title,
-            description: useCase.description,
-            iconImage: useCase.attribute
-          }));
-          this.filteredResults = [];
-        } else {
-          console.error("Data format issue");
-          console.log(data);
-          this.filteredResults = [];
-        }
-        this.loading = false;
-      })
-      
-  }
+      this.loading = false;
+    })
+    .catch(error => console.error("Fetch error:", error));
+}
 
   /**
    * haxProperties integration via file reference

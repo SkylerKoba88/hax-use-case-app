@@ -18,7 +18,7 @@ export class UseCasesItems extends DDDSuper(I18NMixin(LitElement)) {
     this.description = '';
     this.iconImage = '';
     this.isSelected = false;
-    this.activeUseCase = '';
+    this.useCaseId = "";
   }
 
   static get properties() {
@@ -30,7 +30,7 @@ export class UseCasesItems extends DDDSuper(I18NMixin(LitElement)) {
         description: { type: String },
         iconImage: {type: String},
         isSelected: {type: Boolean, reflected: true},
-        activeUseCase: {type: String}
+        useCaseId: {type: String}
     };
   }
 
@@ -82,6 +82,10 @@ export class UseCasesItems extends DDDSuper(I18NMixin(LitElement)) {
       position: relative;
     }
     .bottomRightText {
+      background-color: var(--ddd-theme-default-skyBlue);
+      color: white;
+      padding: 4px;
+      border-radius: var(--ddd-radius-xs);
       position: absolute;
       bottom: 4px;
       right: 16px;
@@ -115,30 +119,59 @@ export class UseCasesItems extends DDDSuper(I18NMixin(LitElement)) {
     `];
   }
  
-  toggleDisplay() {
-//todo: make selected button change between selected/select && different colors
-//make continue button appear/disappear
+  /*toggleDisplay() {
     this.isSelected = !this.isSelected;
     if (this.isSelected) {
-      console.log(this.activeUseCase);
+      this.toggleSelection();
+    }
+    
+    if (this.activeUseCase !== this.useCaseId) {
+      this.dispatchEvent(new CustomEvent('select-use-case', {
+        detail: { useCaseId: this.useCaseId },
+        bubbles: true,
+        composed: true
+      }));
+    }
+  }*/
+  toggleDisplay() {
+    this.dispatchEvent(new CustomEvent('select-use-case', {
+      detail: { useCaseId: this.useCaseId },
+      bubbles: true,
+      composed: true
+    }));
+  }
+    /*toggleSelection() {
+      this.dispatchEvent(
+        new CustomEvent('select-use-case', {
+          detail: { useCaseId: this.useCaseId },
+          bubbles: true,
+          composed: true,
+        })
+      );
+    }*/
+ 
+  continueAction() {
+    if (this.isSelected) {
+      alert(`Continuing with this use case: ${this.heading}`);
     }
   }
+  
   // Lit render the HTML
   render() {
     return html`
     <div class="image">
       <div class="imageContainer">
         <a href="${this.demoLink}" target="_blank"><img src="${this.source}" alt="${this.heading}" ></a>
-        <p class="bottomRightText">Demo></p>
+        <a href="${this.demoLink}" target="_blank"><p class="bottomRightText">Demo></p></a>
       </div>
       
-        <div>
+        <div class="${this.isSelected ? 'selected' : ''}">
           <h2>${this.heading}</h2>
           ${this.description}
           <div style="background-color: transparent; display: flex; padding: 8px;" class="cardBottom">
             <simple-icon-lite id="icon" aria-hidden="true" part="icon" icon="${this.iconImage}" dir="ltr" class="tooltiptext">${this.iconImage}</simple-icon-lite>
             <button class="select ${this.isSelected ? 'selected' : ''}" @click=${this.toggleDisplay}>${this.isSelected ? 'Selected' : 'Select'}</button>
-            <button class="continue ${this.isSelected ? 'visible' : ''}">Continue</button>
+            <button class="continue ${this.isSelected ? 'visible' : ''}" @click=${this.continueAction}>Continue</button>
           </div>
           
         </div>
