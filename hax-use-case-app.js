@@ -142,7 +142,7 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
     this.searchValue = this.value?.toLowerCase() || ""; //declares search value to value in lowercase
 
     this.filteredResults = this.useCases.filter((useCase) => { //maps filteredResults
-      const matchSearch = this.searchValue ? useCase.tag.toLowerCase().includes(this.searchValue) :true;
+      const matchSearch = this.searchValue ? useCase.tag.toLowerCase().includes(this.searchValue) : true;
 
       const useCaseTag = useCase.tag?.toLowerCase() || "";
       const matchFilters = this.checkedFilters.length === 0
@@ -272,8 +272,8 @@ updateResults(value) {
           iconImage: useCase.attribute || ""
         }));
 
-        console.log("Fetched Use Cases (Full Objects):", this.useCases);
-        this.filter();
+        this.filteredResults = [...this.useCases];  // Display all use cases initially
+        this.filter(); // Apply filtering logic
       } else {
         console.error("Data format issue");
         this.useCases = [];
