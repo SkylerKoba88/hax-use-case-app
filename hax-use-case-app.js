@@ -62,6 +62,7 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
         padding: var(--ddd-spacing-4);
         background-color: var(--ddd-theme-default-white);
         border-radius: var(--ddd-radius-xs);
+        width: 430px;
       }
       .filterButtons {
         display: flex;
@@ -95,18 +96,19 @@ export class HaxUseCaseApp extends DDDSuper(I18NMixin(LitElement)) {
         height: 24px;
       }
       .results {
-        width: 920px;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 16px;
-        flex: 1;
-        padding: 0px 16px;
-        margin: 16px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
         width: 100%;
+        padding: 8px;
         box-sizing: border-box;
       }
       .activeUseCase {
         background-color: blue;
+      }
+      use-cases-items {
+        width: 100%;
+        max-width: 240px;
       }
     `];
   }
